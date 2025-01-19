@@ -1,0 +1,42 @@
+{
+	"[json]": {
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"[markdown]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[sql]": {
+		"editor.defaultFormatter": "adpyke.vscode-sql-formatter"
+	},
+	"cSpell.customDictionaries": {
+		"package-dictionary": {
+			"addWords": true,
+			"name": "package dictionary",
+			"path": "./.vscode/.cspell/package-dictionary.txt",
+			"scope": "workspace"
+		}
+	},
+	"cSpell.ignorePaths": [
+		"vscode-extension",
+		".git/objects",
+		".vscode",
+		".vscode-insiders"
+	],
+	"cSpell.languageSettings": [
+		{
+			"allowCompoundWords": false,
+			"dictionaries": ["go"],
+			"languageId": "go"
+		}
+	],
+	"code-runner.clearPreviousOutput": true,
+	"code-runner.runInTerminal": true,
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": "always"
+	},
+	"editor.detectIndentation": true,
+	"editor.formatOnSave": true,
+	"editor.tabSize": 4,
+	"editor.unicodeHighlight.includeStrings": false,
+	"sql-formatter.uppercase": true
+}
