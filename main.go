@@ -34,10 +34,6 @@ func main() {
 
 	// Init discord
 	bot := discord.NewManager()
-	err = bot.Init(cfg)
-	if err != nil {
-		panic(err) // Program will never run properly when discord init fails
-	}
 
 	// Setup database
 	err = setup()
@@ -49,8 +45,13 @@ func main() {
 	// Init cron jobs
 	c := cron.New()
 	s := scheduler.NewScheduler(c, db)
-	s.SetBot(bot)
-	s.AddDailyCron()
+	s.AddDailyCron(bot)
+
+	// Start discord bot
+	err = bot.Init(cfg)
+	if err != nil {
+		panic(err) // Program will never run properly when discord init fails
+	}
 
 	// Start cron job
 	c.Start()

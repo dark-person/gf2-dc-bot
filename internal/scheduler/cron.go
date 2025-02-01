@@ -3,12 +3,12 @@ package scheduler
 import (
 	"fmt"
 	"time"
+
+	"github.com/dark-person/gf2-dc-bot/internal/discord"
 )
 
-// Run daily notification. This function is public method due to more flexibility to testing.
-func (s *Scheduler) RunDaily() {
-	fmt.Println(currentTimeStr(), "Send testing message.")
-
+// Get daily notification as string. This function is public method due to more flexibility.
+func (s *Scheduler) GetDailyReminderMsg() string {
 	// Get instance of current time
 	t := time.Now()
 
@@ -23,7 +23,7 @@ func (s *Scheduler) RunDaily() {
 	details, err := s.getScheduleDetails(t)
 	if err != nil {
 		fmt.Println(currentTimeStr(), "Error getting reminder details:", err)
-		return
+		return ""
 	}
 
 	// Check if activity is going on
@@ -66,20 +66,11 @@ func (s *Scheduler) RunDaily() {
 
 	// Add horizontal line break
 	msg += "__                                        __"
-
-	fmt.Println("Message: \n\n", msg)
-
-	// Send discord message by combined all
-	err = s.sendReminder(msg)
-	if err != nil {
-		fmt.Println(currentTimeStr(), "Error sending discord message:", err)
-		return
-	}
-	fmt.Println(currentTimeStr(), "Message sent.")
+	return msg
 }
 
 // Init cron task that work daily.
-func (s *Scheduler) AddDailyCron() {
+func (s *Scheduler) AddDailyCron(bot discord.Bot) {
 	// Recalculate ranged schedule date when startup
 	s.calcNextRangedDate()
 	fmt.Println(currentTimeStr(), "[Startup] Next gun-smoke frontline date updated.")
@@ -91,5 +82,17 @@ func (s *Scheduler) AddDailyCron() {
 	})
 
 	// Send message at 22:00 of computer
-	s.c.AddFunc("0 22 * * *", s.RunDaily)
+	s.c.AddFunc("0 22 * * *", func() {
+		fmt.Println(currentTimeStr(), "[Daily] Start send daily reminder message.")
+		msg := s.GetDailyReminderMsg()
+		fmt.Println("Message: \n\n", msg)
+
+		// Send discord message by combined all
+		err := bot.SendReminder(msg)
+		if err != nil {
+			fmt.Println(currentTimeStr(), "Error sending discord message:", err)
+			return
+		}
+		fmt.Println(currentTimeStr(), "[Daily] Message sent.")
+	})
 }
