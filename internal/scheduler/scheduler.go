@@ -24,7 +24,12 @@ func NewScheduler(c *cron.Cron, db *lazydb.LazyDB) *Scheduler {
 }
 
 // Set the discord bot.
-func (s *Scheduler) SetBot(bm *discord.BotManager) {
+func (s *Scheduler) SetBot(bm discord.Bot) {
+	if bm == nil {
+		panic("You must provide a bot reference for scheduler creation")
+	}
+
+	// Set bot
 	s.bot = bm
 }
 
