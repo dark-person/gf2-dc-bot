@@ -28,15 +28,15 @@ func (s *Scheduler) SetBot(bm *discord.BotManager) {
 	s.bot = bm
 }
 
-// Send a message to notify, through discord channel.
+// Send a message of reminder, through discord channel.
 // If the bot is not available, then this function has no effect.
-func (s *Scheduler) notify(message string) error {
+func (s *Scheduler) sendReminder(message string) error {
 	if s.bot == nil {
 		fmt.Println("Warning: discord bot is not available")
 		return nil
 	}
 
-	return s.bot.Notify(message)
+	return s.bot.SendReminder(message)
 }
 
 // Get current time in opinionated formatted string.

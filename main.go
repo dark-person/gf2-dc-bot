@@ -30,7 +30,7 @@ func main() {
 	}
 
 	fmt.Println(currentTimeStr(),
-		"Config loaded. Token: ", cfg.Token, "Channels: ", cfg.ChannelID)
+		"Config loaded. Token: ", cfg.Token, "Channels: ", cfg.ReminderChannel)
 
 	// Init discord
 	bot := discord.NewManager()

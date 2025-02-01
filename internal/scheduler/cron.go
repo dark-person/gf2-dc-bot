@@ -70,7 +70,7 @@ func (s *Scheduler) RunDaily() {
 	fmt.Println("Message: \n\n", msg)
 
 	// Send discord message by combined all
-	err = s.notify(msg)
+	err = s.sendReminder(msg)
 	if err != nil {
 		fmt.Println(currentTimeStr(), "Error sending discord message:", err)
 		return

@@ -20,16 +20,16 @@ type BotManager struct {
 	initalized bool                  // Only true when this manager is initialized
 	session    *discordgo.Session    // Discord session that designed for notification
 
-	NotifiyChannel string // Channel ID for notification
+	ReminderChannel string // Channel ID for daily reminder notification
 }
 
 // Create a new empty discord bot manager.
 func NewManager() *BotManager {
 	return &BotManager{
-		cfg:            nil,
-		initalized:     false,
-		session:        nil,
-		NotifiyChannel: "",
+		cfg:             nil,
+		initalized:      false,
+		session:         nil,
+		ReminderChannel: "",
 	}
 }
 
@@ -37,12 +37,12 @@ func NewManager() *BotManager {
 // which also validate the configuration is able to run or not.
 func (bm *BotManager) Init(cfg *config.DiscordConfig) error {
 	// Perform validation of the configuration
-	if cfg.Token == "" || cfg.ChannelID == "" {
+	if cfg.Token == "" || cfg.ReminderChannel == "" {
 		return fmt.Errorf("discord token or channel ID not set")
 	}
 
 	bm.cfg = cfg // Store original configuration for future reference
-	bm.NotifiyChannel = cfg.ChannelID
+	bm.ReminderChannel = cfg.ReminderChannel
 
 	var err error
 

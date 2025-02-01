@@ -11,8 +11,11 @@ import (
 
 // Config for discord bots.
 type DiscordConfig struct {
-	Token     string `koanf:"discord.token"`      // Token of discord bot. This token is required to send message to discord channel.
-	ChannelID string `koanf:"discord.channel-id"` // Channel ID to send message
+	// Token of discord bot. This token is required to send message to discord channel.
+	Token string `koanf:"discord.token"`
+
+	// Channel ID for daily reminder notification
+	ReminderChannel string `koanf:"reminder.channel-id"`
 }
 
 // Load yaml config from given path,
