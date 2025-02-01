@@ -29,8 +29,12 @@ func main() {
 	fmt.Println(currentTimeStr(),
 		"Config loaded. Token: ", cfg.Token, "Channels: ", cfg.ChannelID)
 
-	// Init task
-	initDailyTask()
+	// Setup database
+	err = setup()
+	if err != nil {
+		panic(err) // Program will never run properly when database init fails
+	}
+	fmt.Println(currentTimeStr(), "Database ready.")
 
 	// Keep the main program running
 	select {}
