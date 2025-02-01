@@ -18,9 +18,9 @@ import (
 type BotManager struct {
 	cfg        *config.DiscordConfig // Original configuration
 	initalized bool                  // Only true when this manager is initialized
+	session    *discordgo.Session    // Discord session that designed for notification
 
-	Notifiy        *discordgo.Session // Discord session that designed for notification
-	NotifiyChannel string             // Channel ID for notification
+	NotifiyChannel string // Channel ID for notification
 }
 
 // Create a new empty discord bot manager.
@@ -28,7 +28,7 @@ func NewManager() *BotManager {
 	return &BotManager{
 		cfg:            nil,
 		initalized:     false,
-		Notifiy:        nil,
+		session:        nil,
 		NotifiyChannel: "",
 	}
 }
@@ -36,7 +36,6 @@ func NewManager() *BotManager {
 // Init this bot manager with given configuration,
 // which also validate the configuration is able to run or not.
 func (bm *BotManager) Init(cfg *config.DiscordConfig) error {
-
 	// Perform validation of the configuration
 	if cfg.Token == "" || cfg.ChannelID == "" {
 		return fmt.Errorf("discord token or channel ID not set")
@@ -47,12 +46,12 @@ func (bm *BotManager) Init(cfg *config.DiscordConfig) error {
 
 	var err error
 
-	bm.Notifiy, err = discordgo.New("Bot " + cfg.Token)
+	bm.session, err = discordgo.New("Bot " + cfg.Token)
 	if err != nil {
 		return fmt.Errorf("failed to create discord bot: %v", err)
 	}
 
-	err = bm.Notifiy.Open()
+	err = bm.session.Open()
 	if err != nil {
 		return fmt.Errorf("failed to open discord connection: %v", err)
 	}

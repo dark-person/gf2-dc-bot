@@ -8,7 +8,7 @@ func (bm *BotManager) Notify(message string) error {
 		return fmt.Errorf("bot manager not initialized")
 	}
 
-	_, err := bm.Notifiy.ChannelMessageSend(bm.NotifiyChannel, message)
+	_, err := bm.session.ChannelMessageSend(bm.NotifiyChannel, message)
 	if err != nil {
 		return fmt.Errorf("failed to send message to discord: %v", err)
 	}
