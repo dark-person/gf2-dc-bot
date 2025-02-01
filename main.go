@@ -5,6 +5,9 @@ import (
 	"time"
 
 	"github.com/dark-person/gf2-dc-bot/internal/config"
+	"github.com/dark-person/gf2-dc-bot/internal/discord"
+	"github.com/dark-person/gf2-dc-bot/internal/scheduler"
+	"github.com/robfig/cron/v3"
 )
 
 // Get current time in opinionated formatted string.
@@ -29,12 +32,28 @@ func main() {
 	fmt.Println(currentTimeStr(),
 		"Config loaded. Token: ", cfg.Token, "Channels: ", cfg.ChannelID)
 
+	// Init discord
+	bot := discord.NewManager()
+	err = bot.Init(cfg)
+	if err != nil {
+		panic(err) // Program will never run properly when discord init fails
+	}
+
 	// Setup database
 	err = setup()
 	if err != nil {
 		panic(err) // Program will never run properly when database init fails
 	}
 	fmt.Println(currentTimeStr(), "Database ready.")
+
+	// Init cron jobs
+	c := cron.New()
+	s := scheduler.NewScheduler(c, db)
+	// s.SetBot(bot)
+	s.AddDailyCron()
+
+	// Start cron job
+	c.Start()
 
 	// Keep the main program running
 	select {}
