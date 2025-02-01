@@ -1,0 +1,95 @@
+package scheduler
+
+import (
+	"fmt"
+	"time"
+)
+
+// Run daily notification. This function is public method due to more flexibility to testing.
+func (s *Scheduler) RunDaily() {
+	fmt.Println(currentTimeStr(), "Send testing message.")
+
+	// Get instance of current time
+	t := time.Now()
+
+	// Set fixed daily info
+	msg := ""
+	msg += "哼，是時候確認一下自己的:\n"
+	msg += "### 每日\n"
+	msg += "- 品質甄選 > 常駐商店 > 每日禮包\n"
+	msg += "- 實兵演習 3 場\n"
+
+	// Get info details
+	details, err := s.getScheduleDetails(t)
+	if err != nil {
+		fmt.Println(currentTimeStr(), "Error getting reminder details:", err)
+		return
+	}
+
+	// Check if activity is going on
+	if details.isActivityBattle {
+		fmt.Println(currentTimeStr(), "Activity Battle Detected.")
+		msg += "- 活動自律 3 場"
+	}
+
+	// Check if weekday is sunday
+	if t.Weekday() == time.Sunday || t.Weekday() == time.Saturday {
+		fmt.Println(currentTimeStr(), "Saturday/Sunday detected.")
+		msg += "\n\n### 每周特別提醒:\n"
+		msg += "- 首領挑戰自律 3 場\n"
+		msg += "- 公會商店兌換 **鍋鍋沙**\n"
+		msg += "- 首領商店兌換 **紫核、好感度道具**\n"
+		msg += "- 調度商店兌換 **抽抽、好感度道具，能全掃就掃**\n"
+		msg += "\n"
+	}
+
+	// Check if today is last two day of current month
+	currentYear, currentMonth, currentDay := t.Date()
+
+	firstOfMonth := time.Date(currentYear, currentMonth, 1, 0, 0, 0, 0, t.Location())
+	last2DayOfMonth := firstOfMonth.AddDate(0, 1, -2).Day()
+
+	if currentDay >= last2DayOfMonth {
+		fmt.Println(currentTimeStr(), "Last two day of month detected.")
+		msg += "\n\n### 月底特別提醒:\n"
+		msg += "- 首領商店兌換 **肥霰**、**抽抽**\n"
+		msg += "- 易物所兌換 **抽抽**\n"
+	}
+
+	// Check if gunsmoke frontline is running
+	if details.isGunSmokeFrontline {
+		fmt.Println(currentTimeStr(), "GunSmoke Frontline Detected.")
+		msg += "### 特別注意!\n**塵煙活動開放中, 記得要出2刀**\n"
+	}
+
+	msg += "\n_WA醬 現在在測試中, 現在模擬的日期是 " + t.Format("2006-01-02") + "_\n" // TODO: REMOVE
+
+	// Add horizontal line break
+	msg += "__                                        __"
+
+	fmt.Println("Message: \n\n", msg)
+
+	// Send discord message by combined all
+	err = s.notify(msg)
+	if err != nil {
+		fmt.Println(currentTimeStr(), "Error sending discord message:", err)
+		return
+	}
+	fmt.Println(currentTimeStr(), "Message sent.")
+}
+
+// Init cron task that work daily.
+func (s *Scheduler) AddDailyCron() {
+	// Recalculate ranged schedule date when startup
+	s.calcNextRangedDate()
+	fmt.Println(currentTimeStr(), "[Startup] Next gun-smoke frontline date updated.")
+
+	// Recalculate ranged schedule date when every day start
+	s.c.AddFunc("0 0 * * *", func() {
+		s.calcNextRangedDate()
+		fmt.Println(currentTimeStr(), "[Daily] Next gun-smoke frontline date updated.")
+	})
+
+	// Send message at 22:00 of computer, "* 22 * * *"
+	s.c.AddFunc("* 22 * * *", s.RunDaily)
+}
