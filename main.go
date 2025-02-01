@@ -49,7 +49,7 @@ func main() {
 	// Init cron jobs
 	c := cron.New()
 	s := scheduler.NewScheduler(c, db)
-	// s.SetBot(bot)
+	s.SetBot(bot)
 	s.AddDailyCron()
 
 	// Start cron job

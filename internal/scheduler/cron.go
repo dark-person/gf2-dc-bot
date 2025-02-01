@@ -90,6 +90,6 @@ func (s *Scheduler) AddDailyCron() {
 		fmt.Println(currentTimeStr(), "[Daily] Next gun-smoke frontline date updated.")
 	})
 
-	// Send message at 22:00 of computer, "* 22 * * *"
-	s.c.AddFunc("* 22 * * *", s.RunDaily)
+	// Send message at 22:00 of computer
+	s.c.AddFunc("0 22 * * *", s.RunDaily)
 }
