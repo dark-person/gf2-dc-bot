@@ -50,10 +50,15 @@ func (bm *BotManager) Init(cfg *config.DiscordConfig) error {
 
 	var err error
 
+	// Create a discord connection session
 	bm.session, err = discordgo.New("Bot " + cfg.Token)
 	if err != nil {
 		return fmt.Errorf("failed to create discord bot: %v", err)
 	}
+
+	// Add interaction listener for message
+	bm.session.Identify.Intents |= discordgo.IntentMessageContent
+	bm.session.AddHandler(bm.messageCreate)
 
 	err = bm.session.Open()
 	if err != nil {
