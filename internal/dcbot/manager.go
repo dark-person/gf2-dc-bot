@@ -6,6 +6,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/dark-person/gf2-dc-bot/internal/config"
 	"github.com/dark-person/gf2-dc-bot/pkg/api"
+	"github.com/dark-person/gf2-dc-bot/pkg/persona/zh/wa2000"
 )
 
 // Manager for control static functions reference of this discord package.
@@ -21,18 +22,22 @@ type BotManager struct {
 	initalized bool                  // Only true when this manager is initialized
 	session    *discordgo.Session    // Discord session that designed for notification
 
-	ReminderChannel string // Channel ID for daily reminder notification
+	persona api.BotPersona // Discord bot personality control
+
+	ReminderChannel      string        // Channel ID for daily reminder notification
+	ReminderMsgGenerator func() string // function to generate reminder message
 }
 
 // Interface check
 var _ api.DiscordBot = (*BotManager)(nil)
 
-// Create a new empty discord bot manager.
+// Create a new empty discord bot manager, with WA2000 persona chosen.
 func NewManager() *BotManager {
 	return &BotManager{
 		cfg:             nil,
 		initalized:      false,
 		session:         nil,
+		persona:         wa2000.New(),
 		ReminderChannel: "",
 	}
 }
@@ -50,10 +55,15 @@ func (bm *BotManager) Init(cfg *config.DiscordConfig) error {
 
 	var err error
 
+	// Create a discord connection session
 	bm.session, err = discordgo.New("Bot " + cfg.Token)
 	if err != nil {
 		return fmt.Errorf("failed to create discord bot: %v", err)
 	}
+
+	// Add interaction listener for message
+	bm.session.Identify.Intents |= discordgo.IntentMessageContent
+	bm.session.AddHandler(bm.messageCreate)
 
 	err = bm.session.Open()
 	if err != nil {
