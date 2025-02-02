@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/dark-person/gf2-dc-bot/internal/config"
-	"github.com/dark-person/gf2-dc-bot/internal/discord"
+	"github.com/dark-person/gf2-dc-bot/internal/dcbot"
 	"github.com/dark-person/gf2-dc-bot/internal/scheduler"
 	"github.com/robfig/cron/v3"
 )
@@ -33,11 +33,7 @@ func main() {
 		"Config loaded. Token: ", cfg.Token, "Channels: ", cfg.ReminderChannel)
 
 	// Init discord
-	bot := discord.NewManager()
-	err = bot.Init(cfg)
-	if err != nil {
-		panic(err) // Program will never run properly when discord init fails
-	}
+	bot := dcbot.NewManager()
 
 	// Setup database
 	err = setup()
@@ -49,8 +45,13 @@ func main() {
 	// Init cron jobs
 	c := cron.New()
 	s := scheduler.NewScheduler(c, db)
-	s.SetBot(bot)
-	s.AddDailyCron()
+	s.AddDailyCron(bot)
+
+	// Start discord bot
+	err = bot.Init(cfg)
+	if err != nil {
+		panic(err) // Program will never run properly when discord init fails
+	}
 
 	// Start cron job
 	c.Start()
