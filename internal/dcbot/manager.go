@@ -5,6 +5,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/dark-person/gf2-dc-bot/internal/config"
+	"github.com/dark-person/gf2-dc-bot/pkg/api"
 )
 
 // Manager for control static functions reference of this discord package.
@@ -22,6 +23,9 @@ type BotManager struct {
 
 	ReminderChannel string // Channel ID for daily reminder notification
 }
+
+// Interface check
+var _ api.DiscordBot = (*BotManager)(nil)
 
 // Create a new empty discord bot manager.
 func NewManager() *BotManager {

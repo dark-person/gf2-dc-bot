@@ -1,6 +1,7 @@
-package dcbot
+// Package for common interface.
+package api
 
 // Interface for discord bot behaviour.
-type Bot interface {
+type DiscordBot interface {
 	SendReminder(message string) error
 }
