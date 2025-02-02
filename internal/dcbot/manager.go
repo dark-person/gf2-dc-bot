@@ -24,7 +24,8 @@ type BotManager struct {
 
 	persona api.BotPersona // Discord bot personality control
 
-	ReminderChannel string // Channel ID for daily reminder notification
+	ReminderChannel      string        // Channel ID for daily reminder notification
+	ReminderMsgGenerator func() string // function to generate reminder message
 }
 
 // Interface check

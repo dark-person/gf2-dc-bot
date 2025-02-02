@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
+
+	"github.com/dark-person/gf2-dc-bot/pkg/discordutils"
 )
 
 // This function will be called (due to AddHandler above) every time a new
@@ -21,6 +23,17 @@ func (bm *BotManager) messageCreate(s *discordgo.Session, m *discordgo.MessageCr
 
 	var isSent bool
 	var err error
+
+	// Check if reminder command calls
+	if m.Content == "!remind" {
+		err := discordutils.SendMsgToChannel(s, m.ChannelID, bm.ReminderMsgGenerator())
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		return // Early return to prevent duplicate messages
+	}
 
 	// ----------------------------------------
 
