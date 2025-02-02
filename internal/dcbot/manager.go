@@ -6,6 +6,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/dark-person/gf2-dc-bot/internal/config"
 	"github.com/dark-person/gf2-dc-bot/pkg/api"
+	"github.com/dark-person/gf2-dc-bot/pkg/persona/zh/wa2000"
 )
 
 // Manager for control static functions reference of this discord package.
@@ -21,18 +22,21 @@ type BotManager struct {
 	initalized bool                  // Only true when this manager is initialized
 	session    *discordgo.Session    // Discord session that designed for notification
 
+	persona api.BotPersona // Discord bot personality control
+
 	ReminderChannel string // Channel ID for daily reminder notification
 }
 
 // Interface check
 var _ api.DiscordBot = (*BotManager)(nil)
 
-// Create a new empty discord bot manager.
+// Create a new empty discord bot manager, with WA2000 persona chosen.
 func NewManager() *BotManager {
 	return &BotManager{
 		cfg:             nil,
 		initalized:      false,
 		session:         nil,
+		persona:         wa2000.New(),
 		ReminderChannel: "",
 	}
 }
