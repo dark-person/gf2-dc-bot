@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/dark-person/gf2-dc-bot/internal/discord"
+	"github.com/dark-person/gf2-dc-bot/internal/dcbot"
 )
 
 // Get daily notification as string. This function is public method due to more flexibility.
@@ -70,7 +70,7 @@ func (s *Scheduler) GetDailyReminderMsg() string {
 }
 
 // Init cron task that work daily.
-func (s *Scheduler) AddDailyCron(bot discord.Bot) {
+func (s *Scheduler) AddDailyCron(bot dcbot.Bot) {
 	// Recalculate ranged schedule date when startup
 	s.calcNextRangedDate()
 	fmt.Println(currentTimeStr(), "[Startup] Next gun-smoke frontline date updated.")

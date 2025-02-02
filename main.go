@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/dark-person/gf2-dc-bot/internal/config"
-	"github.com/dark-person/gf2-dc-bot/internal/discord"
+	"github.com/dark-person/gf2-dc-bot/internal/dcbot"
 	"github.com/dark-person/gf2-dc-bot/internal/scheduler"
 	"github.com/robfig/cron/v3"
 )
@@ -33,7 +33,7 @@ func main() {
 		"Config loaded. Token: ", cfg.Token, "Channels: ", cfg.ReminderChannel)
 
 	// Init discord
-	bot := discord.NewManager()
+	bot := dcbot.NewManager()
 
 	// Setup database
 	err = setup()
