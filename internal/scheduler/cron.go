@@ -62,7 +62,7 @@ func (s *Scheduler) GetDailyReminderMsg() string {
 		msg += "### 特別注意!\n**塵煙活動開放中, 記得要出2刀**\n"
 	}
 
-	msg += "\n_WA醬 現在在測試中, 現在模擬的日期是 " + t.Format("2006-01-02") + "_\n" // TODO: REMOVE
+	msg += "\n\n_WA醬 現在在測試中, 現在模擬的日期是 " + t.Format("2006-01-02") + "_\n" // TODO: REMOVE
 
 	// Add horizontal line break
 	msg += "__                                        __"
