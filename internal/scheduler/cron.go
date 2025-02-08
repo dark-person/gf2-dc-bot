@@ -35,12 +35,11 @@ func (s *Scheduler) GetDailyReminderMsg() string {
 	// Check if weekday is sunday
 	if t.Weekday() == time.Sunday || t.Weekday() == time.Saturday {
 		fmt.Println(currentTimeStr(), "Saturday/Sunday detected.")
-		msg += "\n\n### 每周特別提醒:\n"
+		msg += "\n### 每周特別提醒:\n"
 		msg += "- 首領挑戰自律 3 場\n"
 		msg += "- 公會商店兌換 **鍋鍋沙**\n"
 		msg += "- 首領商店兌換 **紫核、好感度道具**\n"
 		msg += "- 調度商店兌換 **抽抽、好感度道具，能全掃就掃**\n"
-		msg += "\n"
 	}
 
 	// Check if today is last two day of current month
@@ -51,7 +50,7 @@ func (s *Scheduler) GetDailyReminderMsg() string {
 
 	if currentDay >= last2DayOfMonth {
 		fmt.Println(currentTimeStr(), "Last two day of month detected.")
-		msg += "\n\n### 月底特別提醒:\n"
+		msg += "\n### 月底特別提醒:\n"
 		msg += "- 首領商店兌換 **肥霰**、**抽抽**\n"
 		msg += "- 易物所兌換 **抽抽**\n"
 	}
@@ -59,10 +58,10 @@ func (s *Scheduler) GetDailyReminderMsg() string {
 	// Check if gunsmoke frontline is running
 	if details.isGunSmokeFrontline {
 		fmt.Println(currentTimeStr(), "GunSmoke Frontline Detected.")
-		msg += "### 特別注意!\n**塵煙活動開放中, 記得要出2刀**\n"
+		msg += "\n### 特別注意!\n**塵煙活動開放中, 記得要出2刀**\n"
 	}
 
-	msg += "\n\n_WA醬 現在在測試中, 現在模擬的日期是 " + t.Format("2006-01-02") + "_\n" // TODO: REMOVE
+	msg += "\n_WA醬 現在在測試中, 現在模擬的日期是 " + t.Format("2006-01-02") + "_\n" // TODO: REMOVE
 
 	// Add horizontal line break
 	msg += "__                                        __"
