@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/dark-person/gf2-dc-bot/internal/calendar"
 	"github.com/dark-person/gf2-dc-bot/pkg/api"
 )
 
@@ -20,16 +21,21 @@ func (s *Scheduler) GetDailyReminderMsg() string {
 	msg += "- 實兵演習 3 場\n"
 
 	// Get info details
-	details, err := s.getScheduleDetails(t)
+	calItems, err := s.cal.GetCurrentActivity(t)
 	if err != nil {
 		fmt.Println(currentTimeStr(), "Error getting reminder details:", err)
 		return ""
 	}
 
 	// Check if activity is going on
-	if details.isActivityBattle {
+	if calendar.HasScheduleName(calItems, "活動物資") {
 		fmt.Println(currentTimeStr(), "Activity Battle Detected.")
-		msg += "- 活動自律 3 場"
+		item := calendar.GetFirstByScheduleName(calItems, "活動物資")
+
+		start := calendar.ConvertIntToTime(item.StartAt)
+		end := calendar.ConvertIntToTime(item.EndAt)
+
+		msg += "- 活動自律 3 場 (" + start.Format("2006-01-02") + " ~ " + end.Format("2006-01-02") + ")\n"
 	}
 
 	// Check if weekday is sunday
@@ -56,7 +62,7 @@ func (s *Scheduler) GetDailyReminderMsg() string {
 	}
 
 	// Check if gunsmoke frontline is running
-	if details.isGunSmokeFrontline {
+	if calendar.HasScheduleName(calItems, "塵煙") {
 		fmt.Println(currentTimeStr(), "GunSmoke Frontline Detected.")
 		msg += "\n### 特別注意!\n**塵煙活動開放中, 記得要出2刀**\n"
 	}
