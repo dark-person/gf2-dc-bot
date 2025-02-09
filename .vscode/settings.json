@@ -20,7 +20,9 @@
 		"vscode-extension",
 		".git/objects",
 		".vscode",
-		".vscode-insiders"
+		".vscode-insiders",
+		"go.mod",
+		"go.sum"
 	],
 	"cSpell.languageSettings": [
 		{

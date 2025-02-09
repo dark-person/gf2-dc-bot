@@ -1,1 +1,9 @@
 # Dictionary for imported packages
+bwmarrin
+dcbot
+discordgo
+discordutils
+knadh
+koanf
+lazydb
+robfig
