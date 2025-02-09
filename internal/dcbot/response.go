@@ -9,8 +9,9 @@ import (
 	"github.com/dark-person/gf2-dc-bot/pkg/discordutils"
 )
 
-// This function will be called (due to AddHandler above) every time a new
-// message is created on any channel that the autenticated bot has access to.
+// This function will be called (due to AddHandler above)
+// every time a new message is created on any channel
+// that the authenticated bot has access to.
 func (bm *BotManager) messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// Ignore all messages created by the bot itself, which is a good practice.
 	if m.Author.ID == s.State.User.ID {

@@ -4,7 +4,7 @@ import "fmt"
 
 // Send message to discord channel. Please note that discord token must be set before call this function.
 func (bm *BotManager) SendReminder(message string) error {
-	if !bm.initalized {
+	if !bm.initialized {
 		return fmt.Errorf("bot manager not initialized")
 	}
 

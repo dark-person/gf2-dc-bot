@@ -3,7 +3,7 @@ package api
 
 import "github.com/bwmarrin/discordgo"
 
-// Interface for discord bot behaviour.
+// Interface for discord bot behavior.
 type DiscordBot interface {
 	SendReminder(message string) error
 }

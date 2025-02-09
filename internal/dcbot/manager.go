@@ -18,9 +18,9 @@ import (
 //
 // Otherwise, this bot manager will never work properly.
 type BotManager struct {
-	cfg        *config.DiscordConfig // Original configuration
-	initalized bool                  // Only true when this manager is initialized
-	session    *discordgo.Session    // Discord session that designed for notification
+	cfg         *config.DiscordConfig // Original configuration
+	initialized bool                  // Only true when this manager is initialized
+	session     *discordgo.Session    // Discord session that designed for notification
 
 	persona api.BotPersona // Discord bot personality control
 
@@ -35,7 +35,7 @@ var _ api.DiscordBot = (*BotManager)(nil)
 func NewManager() *BotManager {
 	return &BotManager{
 		cfg:             nil,
-		initalized:      false,
+		initialized:     false,
 		session:         nil,
 		persona:         wa2000.New(),
 		ReminderChannel: "",
@@ -70,6 +70,6 @@ func (bm *BotManager) Init(cfg *config.DiscordConfig) error {
 		return fmt.Errorf("failed to open discord connection: %v", err)
 	}
 
-	bm.initalized = true
+	bm.initialized = true
 	return nil
 }
