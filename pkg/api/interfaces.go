@@ -12,6 +12,9 @@ type DiscordBot interface {
 //
 // This interface is defined for easily implement for other bots.
 type BotPersona interface {
+	// Return help message
+	Help() string
+
 	// Return random character dialog as string.
 	RandomDialog() string
 

@@ -68,6 +68,14 @@ func New() *personaWA2000 {
 	return &personaWA2000{dialogList: l, defense: initDefenseVal}
 }
 
+func (p *personaWA2000) Help() string {
+	return "" +
+		"哼，記好這些指令了，沒有空格的:\n" +
+		"- `?help`: 幫助訊息\n" +
+		"- `!remind` : 提醒今天有什麼要做\n" +
+		"- `@我` : 哼\n"
+}
+
 func (p *personaWA2000) RandomDialog() string {
 	r := rand.IntN(len(p.dialogList))
 	return p.dialogList[r]

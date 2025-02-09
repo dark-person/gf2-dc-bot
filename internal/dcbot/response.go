@@ -24,6 +24,19 @@ func (bm *BotManager) messageCreate(s *discordgo.Session, m *discordgo.MessageCr
 	var isSent bool
 	var err error
 
+	// help command
+	if m.Content == "?help" {
+		err := discordutils.SendMsgToChannel(s, m.ChannelID, bm.persona.Help())
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		return // Early return to prevent duplicate messages
+	}
+
+	// ----------------------------------------
+
 	// Check if reminder command calls
 	if m.Content == "!remind" {
 		err := discordutils.SendMsgToChannel(s, m.ChannelID, bm.ReminderMsgGenerator())
