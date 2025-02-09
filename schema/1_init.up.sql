@@ -2,10 +2,10 @@
 --
 --
 --  ========================================================
-CREATE TABLE `const_scheule_name` (scheulde_name VARCHAR(255) PRIMARY KEY);
+CREATE TABLE `const_schedule_name` (schedule_name VARCHAR(255) PRIMARY KEY);
 
 INSERT INTO
-    `const_scheule_name` (scheulde_name)
+    `const_schedule_name` (schedule_name)
 VALUES
     (''),
     ('塵煙'),
@@ -13,21 +13,23 @@ VALUES
 
 --  ========================================================
 CREATE TABLE "calendar_ranged" (
-    "scheulde_name" VARCHAR(255) NOT NULL DEFAULT '',
+    "schedule_name" VARCHAR(255) NOT NULL DEFAULT '',
     "start_at" INTEGER NOT NULL DEFAULT -1,
     "end_at" INTEGER NOT NULL DEFAULT -1,
     "is_predicted" INTEGER NOT NULL DEFAULT 1,
-    FOREIGN KEY("scheulde_name") REFERENCES "const_scheule_name"("scheulde_name") ON UPDATE CASCADE,
-    PRIMARY KEY("scheulde_name", "start_at", "end_at")
+    FOREIGN KEY("schedule_name") REFERENCES "const_schedule_name"("schedule_name") ON UPDATE CASCADE,
+    PRIMARY KEY("schedule_name", "start_at", "end_at")
 );
 
 INSERT INTO
     "calendar_ranged" (
-        "scheulde_name",
+        "schedule_name",
         "start_at",
         "end_at",
         "is_predicted"
     )
 VALUES
     ('塵煙', '20250119', '20250125', 0),
-    ('活動物資', '20250116', '20250205', 0);
+    ('活動物資', '20250116', '20250205', 0),
+    ('塵煙', '20250209', '20250215', 0),
+    ('活動物資', '20250206', '20250226', 0);
