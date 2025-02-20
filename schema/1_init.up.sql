@@ -72,3 +72,14 @@ INSERT INTO
 VALUES
     (1, 20250210, 0),
     (2, 20250311, 0);
+
+--  ========================================================
+CREATE VIEW "view_calendar_cycled_event" AS
+SELECT
+    cal."cycle_event_id",
+    "cycle_event_name",
+    "deadline_at",
+    "is_auto_calc"
+FROM
+    "calendar_cycled_event" cal
+    LEFT JOIN const_cycle_event AS const ON const.cycle_event_id = cal.cycle_event_id;
