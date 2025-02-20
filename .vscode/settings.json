@@ -8,6 +8,8 @@
 	"[sql]": {
 		"editor.defaultFormatter": "adpyke.vscode-sql-formatter"
 	},
+	"code-runner.clearPreviousOutput": true,
+	"code-runner.runInTerminal": true,
 	"cSpell.customDictionaries": {
 		"package-dictionary": {
 			"addWords": true,
@@ -31,8 +33,6 @@
 			"languageId": "go"
 		}
 	],
-	"code-runner.clearPreviousOutput": true,
-	"code-runner.runInTerminal": true,
 	"editor.codeActionsOnSave": {
 		"source.organizeImports": "always"
 	},
