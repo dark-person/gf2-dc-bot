@@ -37,6 +37,18 @@ func (c *Calendar) getCalendarItems(query string, intTime ...any) ([]CalendarIte
 	return items, nil
 }
 
+// Core function to add calendar items to database.
+// This function assume all argument passed to this function is valid, no checking will be performed.
+func (c *Calendar) addCalendarItems(item CalendarItem) error {
+	// Insert record back to database
+	_, err := c.db.Exec(
+		"INSERT OR IGNORE INTO `calendar_ranged` (schedule_name, start_at, end_at, is_predicted) VALUES (?, ?, ?, ?)",
+		item.Name, item.StartAt, item.EndAt, item.IsPredicted,
+	)
+
+	return err
+}
+
 // Core function to get cycled event from database.
 // This function assume all argument passed to this function is valid, no checking will be performed.
 func (c *Calendar) getCycledEventItem(query string, intTime ...any) ([]CycledEventItem, error) {
