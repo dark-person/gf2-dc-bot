@@ -36,3 +36,43 @@ func (c *Calendar) getCalendarItems(query string, intTime ...any) ([]CalendarIte
 
 	return items, nil
 }
+
+// Core function to get cycled event from database.
+// This function assume all argument passed to this function is valid, no checking will be performed.
+func (c *Calendar) getCycledEventItem(query string, intTime ...any) ([]CycledEventItem, error) {
+	// Query calendar item by given SQL, trust the intTime parameter
+	rows, err := c.db.Query(query, intTime...)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Loop results
+	var items []CycledEventItem
+
+	for rows.Next() {
+		var scheduleName string
+		var deadlineDate int
+		var isPredicted bool
+		var cycleDay int
+		var remindBefore int
+
+		err := rows.Scan(&scheduleName, &deadlineDate, &isPredicted, &cycleDay, &remindBefore)
+		if err != nil {
+			return nil, err
+		}
+
+		// To item
+		item := CycledEventItem{
+			Name:         scheduleName,
+			Deadline:     deadlineDate,
+			IsAutoCalc:   isPredicted,
+			CycleDay:     cycleDay,
+			RemindBefore: remindBefore,
+		}
+
+		items = append(items, item)
+	}
+
+	return items, nil
+}

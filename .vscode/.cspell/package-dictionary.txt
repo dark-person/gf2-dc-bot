@@ -1,4 +1,5 @@
 # Dictionary for imported packages
+AUTOINCREMENT
 bwmarrin
 dcbot
 discordgo

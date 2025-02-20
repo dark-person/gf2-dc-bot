@@ -1,5 +1,7 @@
 package calendar
 
+import "time"
+
 // Check if a list of calendars item contains a event that has given schedule name.
 func HasScheduleName(c []CalendarItem, scheduleName string) bool {
 	for _, item := range c {
@@ -39,6 +41,19 @@ func FilterByPredictFlag(c []CalendarItem, isPredicted bool) []CalendarItem {
 
 	for _, item := range c {
 		if item.IsPredicted == isPredicted {
+			result = append(result, item)
+		}
+	}
+
+	return result
+}
+
+// Filter the cycled event that require reminder in given time.
+func FilterNoRemindCycledEvents(c []CycledEventItem, t time.Time) []CycledEventItem {
+	result := []CycledEventItem{}
+
+	for _, item := range c {
+		if item.IsNeedReminder(t) {
 			result = append(result, item)
 		}
 	}

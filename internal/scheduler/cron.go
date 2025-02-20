@@ -48,6 +48,24 @@ func (s *Scheduler) GetDailyReminderMsg() string {
 		msg += "- 調度商店兌換 **抽抽、好感度道具，能全掃就掃**\n"
 	}
 
+	// Cycle Event reminder
+	cycled, err := s.cal.GetUpcomingDeadline(t)
+	if err != nil {
+		fmt.Println(currentTimeStr(), "Error getting upcoming deadline:", err)
+		return ""
+	}
+
+	// Get event that require reminder
+	cycled = calendar.FilterNoRemindCycledEvents(cycled, t)
+
+	if len(cycled) > 0 {
+		fmt.Println(currentTimeStr(), "Cycle event detected.")
+		msg += "\n### 循環活動提醒:\n"
+		for _, evt := range cycled {
+			msg += fmt.Sprintf("- %s (剩餘 %d 天)\n", evt.Name, evt.RemainDays(t))
+		}
+	}
+
 	// Check if today is last two day of current month
 	currentYear, currentMonth, currentDay := t.Date()
 
