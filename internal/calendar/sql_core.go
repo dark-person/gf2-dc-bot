@@ -63,19 +63,21 @@ func (c *Calendar) getCycledEventItem(query string, intTime ...any) ([]CycledEve
 	var items []CycledEventItem
 
 	for rows.Next() {
+var id uint
 		var scheduleName string
 		var deadlineDate int
 		var isPredicted bool
 		var cycleDay int
 		var remindBefore int
 
-		err := rows.Scan(&scheduleName, &deadlineDate, &isPredicted, &cycleDay, &remindBefore)
+		err := rows.Scan(&id, &scheduleName, &deadlineDate, &isPredicted, &cycleDay, &remindBefore)
 		if err != nil {
 			return nil, err
 		}
 
 		// To item
 		item := CycledEventItem{
+EventID:      id,
 			Name:         scheduleName,
 			Deadline:     deadlineDate,
 			IsAutoCalc:   isPredicted,

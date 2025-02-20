@@ -54,6 +54,7 @@ func (c CalendarItem) Copy() CalendarItem {
 
 // Data container for cycled event. This struct is designed based on database structure.
 type CycledEventItem struct {
+	EventID      uint   // Event ID in database
 	Name         string // Name of cycled event
 	Deadline     int    // Deadline date of cycled event
 	IsAutoCalc   bool   // This event date is auto calculated or not
