@@ -102,12 +102,20 @@ func (s *Scheduler) GetDailyReminderMsg() string {
 // Init cron task that work daily.
 func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
 	// Recalculate ranged schedule date when startup
-	s.calcNextRangedDate()
+	err := s.cal.CalcNextRangedDate()
+	if err != nil {
+		fmt.Println(currentTimeStr(), "Error calculating next ranged date:", err)
+		return
+	}
 	fmt.Println(currentTimeStr(), "[Startup] Next gun-smoke frontline date updated.")
 
 	// Recalculate ranged schedule date when every day start
 	s.c.AddFunc("0 0 * * *", func() {
-		s.calcNextRangedDate()
+		err := s.cal.CalcNextRangedDate()
+		if err != nil {
+			fmt.Println(currentTimeStr(), "Error calculating next ranged date:", err)
+			return
+		}
 		fmt.Println(currentTimeStr(), "[Daily] Next gun-smoke frontline date updated.")
 	})
 
