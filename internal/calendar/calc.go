@@ -37,3 +37,40 @@ func (c *Calendar) CalcNextRangedDate() error {
 
 	return nil
 }
+
+// Calculate the next deadline by latest
+// (i.e. can be calculated by program)
+// data in database.
+func (c *Calendar) CalcNextDeadline() error {
+	// Get Latest cycled event
+	raw, err := c.getLatestDeadline()
+	if err != nil {
+		return fmt.Errorf("error when get latest deadline: %v", err)
+	}
+
+	t := time.Now()
+
+	// Loop every items
+	for _, item := range raw {
+		// Skip if next deadline is ready
+		itemDeadline := ConvertIntToTime(item.Deadline)
+		if t.Before(itemDeadline) {
+			continue
+		}
+
+		// Calculate
+		next := item.Copy()
+
+		nextDeadline := ConvertIntToTime(next.Deadline).AddDate(0, 0, next.CycleDay)
+		next.Deadline = ConvertTimeToInt(nextDeadline)
+		next.IsAutoCalc = true
+
+		// Insert to database
+		err := c.addCycledEventItem(next)
+		if err != nil {
+			return fmt.Errorf("error when insert next deadline: %v", err)
+		}
+	}
+
+	return nil
+}

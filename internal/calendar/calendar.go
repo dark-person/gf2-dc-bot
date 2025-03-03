@@ -62,6 +62,18 @@ type CycledEventItem struct {
 	RemindBefore int    // When to remind user before deadline
 }
 
+// Deep copy of current cycled event.
+func (c CycledEventItem) Copy() CycledEventItem {
+	return CycledEventItem{
+		EventID:      c.EventID,
+		Name:         c.Name,
+		Deadline:     c.Deadline,
+		IsAutoCalc:   c.IsAutoCalc,
+		CycleDay:     c.CycleDay,
+		RemindBefore: c.RemindBefore,
+	}
+}
+
 // Check if given time require a reminder on current cycled event.
 func (c *CycledEventItem) IsNeedReminder(t time.Time) bool {
 	// Calculate the reminder date by subtraction

@@ -49,6 +49,17 @@ func (c *Calendar) addCalendarItems(item CalendarItem) error {
 	return err
 }
 
+// Add given cycled event item to database.
+func (c *Calendar) addCycledEventItem(item CycledEventItem) error {
+	// Insert record back to database
+	_, err := c.db.Exec(
+		"INSERT OR IGNORE INTO `calendar_cycled_event` (cycle_event_id, deadline_at, is_auto_calc) VALUES (?, ?, ?)",
+		item.EventID, item.Deadline, item.IsAutoCalc,
+	)
+
+	return err
+}
+
 // Core function to get cycled event from database.
 // This function assume all argument passed to this function is valid, no checking will be performed.
 func (c *Calendar) getCycledEventItem(query string, intTime ...any) ([]CycledEventItem, error) {
@@ -63,7 +74,7 @@ func (c *Calendar) getCycledEventItem(query string, intTime ...any) ([]CycledEve
 	var items []CycledEventItem
 
 	for rows.Next() {
-var id uint
+		var id uint
 		var scheduleName string
 		var deadlineDate int
 		var isPredicted bool
@@ -77,7 +88,7 @@ var id uint
 
 		// To item
 		item := CycledEventItem{
-EventID:      id,
+			EventID:      id,
 			Name:         scheduleName,
 			Deadline:     deadlineDate,
 			IsAutoCalc:   isPredicted,
