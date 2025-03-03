@@ -99,24 +99,35 @@ func (s *Scheduler) GetDailyReminderMsg() string {
 	return msg
 }
 
-// Init cron task that work daily.
-func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
-	// Recalculate ranged schedule date when startup
+// Calculate next date, include ranged date & cycled event.
+func (s *Scheduler) calcNext() error {
+	// Recalculate ranged schedule date
 	err := s.cal.CalcNextRangedDate()
 	if err != nil {
-		fmt.Println(currentTimeStr(), "Error calculating next ranged date:", err)
+		return fmt.Errorf("error when calculating next ranged date: %v", err)
+	}
+
+	return nil
+}
+
+// Init cron task that work daily.
+func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
+	// Recalculate dates when startup
+	err := s.calcNext()
+	if err != nil {
+		fmt.Println(currentTimeStr(), "Error calculating next date in startup: ", err)
 		return
 	}
-	fmt.Println(currentTimeStr(), "[Startup] Next gun-smoke frontline date updated.")
+	fmt.Println(currentTimeStr(), "[Startup] Next date updated.")
 
 	// Recalculate ranged schedule date when every day start
 	s.c.AddFunc("0 0 * * *", func() {
-		err := s.cal.CalcNextRangedDate()
+		err := s.calcNext()
 		if err != nil {
 			fmt.Println(currentTimeStr(), "Error calculating next ranged date:", err)
 			return
 		}
-		fmt.Println(currentTimeStr(), "[Daily] Next gun-smoke frontline date updated.")
+		fmt.Println(currentTimeStr(), "[Daily] Next date updated.")
 	})
 
 	// Send message at 22:00 of computer
