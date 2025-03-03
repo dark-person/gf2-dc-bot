@@ -107,6 +107,12 @@ func (s *Scheduler) calcNext() error {
 		return fmt.Errorf("error when calculating next ranged date: %v", err)
 	}
 
+	// Recalculate next deadline of cycled event
+	err = s.cal.CalcNextDeadline()
+	if err != nil {
+		return fmt.Errorf("error when calculating next deadline: %v", err)
+	}
+
 	return nil
 }
 
