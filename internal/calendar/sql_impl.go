@@ -11,6 +11,18 @@ func (c *Calendar) GetLatestConfirmedRangedActivity() ([]CalendarItem, error) {
 	)
 }
 
+// Get latest deadline for cycled event item from database.
+func (c *Calendar) getLatestDeadline() ([]CycledEventItem, error) {
+	return c.getCycledEventItem(
+		`SELECT cycle_event_id, cycle_event_name, deadline_at, is_auto_calc, cycle_day, remind_before FROM (
+			SELECT evt.cycle_event_id, cycle_event_name, deadline_at, is_auto_calc, cycle_day, remind_before 
+				FROM calendar_cycled_event evt 
+				LEFT JOIN const_cycle_event const ON evt.cycle_event_id = const.cycle_event_id 
+ 				ORDER BY deadline_at DESC
+		) GROUP BY cycle_event_id`,
+	)
+}
+
 // Get all ongoing activity (i.e. current & future activity) from database.
 func (c *Calendar) GetOngoingActivity(t time.Time) ([]CalendarItem, error) {
 	return c.getCalendarItems(
