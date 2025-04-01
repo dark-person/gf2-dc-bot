@@ -4,9 +4,9 @@ import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/dark-person/gf2-dc-bot/internal/calendar"
 	"github.com/dark-person/gf2-dc-bot/internal/config"
 	"github.com/dark-person/gf2-dc-bot/pkg/api"
-	"github.com/dark-person/gf2-dc-bot/pkg/persona/zh/wa2000"
 )
 
 // Manager for control static functions reference of this discord package.
@@ -18,11 +18,12 @@ import (
 //
 // Otherwise, this bot manager will never work properly.
 type BotManager struct {
-	cfg         *config.DiscordConfig // Original configuration
-	initialized bool                  // Only true when this manager is initialized
-	session     *discordgo.Session    // Discord session that designed for notification
+	cfg     *config.DiscordConfig // Original configuration
+	cal     *calendar.Calendar    // Calendar for calculation
+	persona api.BotPersona        // Discord bot personality control
 
-	persona api.BotPersona // Discord bot personality control
+	initialized bool               // Only true when this manager is initialized
+	session     *discordgo.Session // Discord session that designed for notification
 
 	ReminderChannel      string        // Channel ID for daily reminder notification
 	ReminderMsgGenerator func() string // function to generate reminder message
@@ -32,12 +33,12 @@ type BotManager struct {
 var _ api.DiscordBot = (*BotManager)(nil)
 
 // Create a new empty discord bot manager, with WA2000 persona chosen.
-func NewManager() *BotManager {
+func NewManager(persona api.BotPersona) *BotManager {
 	return &BotManager{
 		cfg:             nil,
 		initialized:     false,
 		session:         nil,
-		persona:         wa2000.New(),
+		persona:         persona,
 		ReminderChannel: "",
 	}
 }
