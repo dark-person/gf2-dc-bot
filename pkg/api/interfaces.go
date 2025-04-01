@@ -5,7 +5,7 @@ import "github.com/bwmarrin/discordgo"
 
 // Interface for discord bot behavior.
 type DiscordBot interface {
-	SendReminder(message string) error
+	SendReminder() error
 }
 
 // Persona interface for discord bots.

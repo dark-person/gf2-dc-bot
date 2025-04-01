@@ -53,7 +53,6 @@ func main() {
 	s.AddDailyCron(bot)
 
 	// Start discord bot
-	bot.ReminderMsgGenerator = s.GetDailyReminderMsg
 	err = bot.Init(cfg)
 	if err != nil {
 		panic(err) // Program will never run properly when discord init fails
