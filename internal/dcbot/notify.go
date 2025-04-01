@@ -12,9 +12,10 @@ func (bm *BotManager) getDailyReminderMsg() string {
 	// Get instance of current time
 	t := time.Now()
 
+	prefix, suffix := bm.persona.GetReminderCustomizedStr(t)
+
 	// Set fixed daily info
-	msg := ""
-	msg += "哼，是時候確認一下自己的:\n"
+	msg := prefix
 	msg += "### 每日\n"
 	msg += "- 品質甄選 > 常駐商店 > 每日禮包\n"
 	msg += "- 實兵演習 3 場\n"
@@ -91,7 +92,7 @@ func (bm *BotManager) getDailyReminderMsg() string {
 			start.Format("2006-01-02") + " ~ " + end.Format("2006-01-02") + ")\n"
 	}
 
-	msg += "\n_WA醬 現在在測試中, 現在模擬的日期是 " + t.Format("2006-01-02") + "_\n" // TODO: REMOVE
+	msg += suffix
 
 	// Add horizontal line break
 	msg += "__                                        __"

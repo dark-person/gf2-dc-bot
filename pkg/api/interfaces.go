@@ -1,7 +1,11 @@
 // Package for common interface.
 package api
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"time"
+
+	"github.com/bwmarrin/discordgo"
+)
 
 // Interface for discord bot behavior.
 type DiscordBot interface {
@@ -14,6 +18,9 @@ type DiscordBot interface {
 type BotPersona interface {
 	// Return help message
 	Help() string
+
+	// Get daily reminder message prefix & suffix, for customization.
+	GetReminderCustomizedStr(t time.Time) (prefix string, suffix string)
 
 	// Return random character dialog as string.
 	RandomDialog() string
