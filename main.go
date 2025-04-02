@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/dark-person/gf2-dc-bot/internal/calendar"
 	"github.com/dark-person/gf2-dc-bot/internal/config"
 	"github.com/dark-person/gf2-dc-bot/internal/dcbot"
 	"github.com/dark-person/gf2-dc-bot/internal/scheduler"
+	"github.com/dark-person/gf2-dc-bot/pkg/persona/zh/wa2000"
 	"github.com/robfig/cron/v3"
 )
 
@@ -33,7 +35,7 @@ func main() {
 		"Config loaded. Token: ", cfg.Token, "Channels: ", cfg.ReminderChannel)
 
 	// Init discord
-	bot := dcbot.NewManager()
+	bot := dcbot.NewManager(wa2000.New())
 
 	// Setup database
 	err = setup()
@@ -42,14 +44,16 @@ func main() {
 	}
 	fmt.Println(currentTimeStr(), "Database ready.")
 
+	// Setup calendar
+	cal := calendar.NewCalendar(db)
+
 	// Init cron jobs
 	c := cron.New()
-	s := scheduler.NewScheduler(c, db)
+	s := scheduler.NewScheduler(c, cal, bot)
 	s.AddDailyCron(bot)
 
 	// Start discord bot
-	bot.ReminderMsgGenerator = s.GetDailyReminderMsg
-	err = bot.Init(cfg)
+	err = bot.Init(cfg, cal)
 	if err != nil {
 		panic(err) // Program will never run properly when discord init fails
 	}

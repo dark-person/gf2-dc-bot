@@ -4,21 +4,21 @@ import (
 	"time"
 
 	"github.com/dark-person/gf2-dc-bot/internal/calendar"
-	"github.com/dark-person/lazydb"
+	"github.com/dark-person/gf2-dc-bot/internal/dcbot"
 	"github.com/robfig/cron/v3"
 )
 
 // Scheduler struct to manage cron jobs.
 type Scheduler struct {
 	c   *cron.Cron         // Root cron job
-	db  *lazydb.LazyDB     // Database connection
 	cal *calendar.Calendar // Calendar for events
+	bot *dcbot.BotManager  // DC Bot manager
 }
 
 // Create a new scheduler instance, which without discord bot settings.
 // If the discord bot is not available, then this scheduler will not send any message to discord.
-func NewScheduler(c *cron.Cron, db *lazydb.LazyDB) *Scheduler {
-	return &Scheduler{c: c, db: db, cal: calendar.NewCalendar(db)}
+func NewScheduler(c *cron.Cron, cal *calendar.Calendar, bot *dcbot.BotManager) *Scheduler {
+	return &Scheduler{c: c, cal: cal, bot: bot}
 }
 
 // Get current time in opinionated formatted string.

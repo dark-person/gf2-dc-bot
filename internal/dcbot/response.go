@@ -40,7 +40,7 @@ func (bm *BotManager) messageCreate(s *discordgo.Session, m *discordgo.MessageCr
 
 	// Check if reminder command calls
 	if m.Content == "!remind" {
-		err := discordutils.SendMsgToChannel(s, m.ChannelID, bm.ReminderMsgGenerator())
+		err := discordutils.SendMsgToChannel(s, m.ChannelID, bm.getDailyReminderMsg())
 		if err != nil {
 			fmt.Println(err)
 			return
