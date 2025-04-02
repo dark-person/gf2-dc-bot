@@ -71,13 +71,22 @@ func (bm *BotManager) getDailyReminderMsg() string {
 	currentYear, currentMonth, currentDay := t.Date()
 
 	firstOfMonth := time.Date(currentYear, currentMonth, 1, 0, 0, 0, 0, t.Location())
-	last2DayOfMonth := firstOfMonth.AddDate(0, 1, -2).Day()
+	lastOfCurrentMonth := firstOfMonth.AddDate(0, 1, -1).Day()
 
-	if currentDay >= last2DayOfMonth {
-		fmt.Println(currentTimeStr(), "Last two day of month detected.")
+	last2DayOfMonth := firstOfMonth.AddDate(0, 1, -2).Day()
+last6DayOfMonth := firstOfMonth.AddDate(0, 1, -6).Day()
+
+	if currentDay >= last6DayOfMonth {
+		fmt.Println(currentTimeStr(), "Monthly reminder is needed.")
+
+			fmt.Println(currentTimeStr(), "Last two day of month detected.")
 		msg += "\n### 月底特別提醒:\n"
+msg += fmt.Sprintf("- 兵棋推演自殺 20 場 (剩餘 %d 天)\n", (lastOfCurrentMonth - currentDay))
+
+		if currentDay >= last2DayOfMonth {
 		msg += "- 首領商店兌換 **肥霰**、**抽抽**\n"
 		msg += "- 易物所兌換 **抽抽**\n"
+}
 	}
 
 	// Check if gun smoke frontline is running
