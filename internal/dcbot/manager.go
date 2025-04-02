@@ -26,8 +26,7 @@ type BotManager struct {
 	initialized bool               // Only true when this manager is initialized
 	session     *discordgo.Session // Discord session that designed for notification
 
-	ReminderChannel      string        // Channel ID for daily reminder notification
-	ReminderMsgGenerator func() string // function to generate reminder message
+	ReminderChannel string // Channel ID for daily reminder notification
 }
 
 // Interface check
@@ -46,7 +45,7 @@ func NewManager(persona api.BotPersona) *BotManager {
 
 // Init this bot manager with given configuration,
 // which also validate the configuration is able to run or not.
-func (bm *BotManager) Init(cfg *config.DiscordConfig) error {
+func (bm *BotManager) Init(cfg *config.DiscordConfig, cal *calendar.Calendar) error {
 	// Perform validation of the configuration
 	if cfg.Token == "" || cfg.ReminderChannel == "" {
 		return fmt.Errorf("discord token or channel ID not set")
@@ -71,6 +70,9 @@ func (bm *BotManager) Init(cfg *config.DiscordConfig) error {
 	if err != nil {
 		return fmt.Errorf("failed to open discord connection: %v", err)
 	}
+
+	// Set calendar object
+	bm.cal = cal
 
 	bm.initialized = true
 	return nil

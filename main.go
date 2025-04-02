@@ -53,7 +53,7 @@ func main() {
 	s.AddDailyCron(bot)
 
 	// Start discord bot
-	err = bot.Init(cfg)
+	err = bot.Init(cfg, cal)
 	if err != nil {
 		panic(err) // Program will never run properly when discord init fails
 	}
