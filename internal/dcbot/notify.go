@@ -19,6 +19,7 @@ func (bm *BotManager) getDailyReminderMsg() string {
 	msg += "### 每日\n"
 	msg += "- 品質甄選 > 常駐商店 > 每日禮包\n"
 	msg += "- 實兵演習 3 場\n"
+	msg += "- 檢查 邊界推進\n"
 
 	// Get info details
 	calItems, err := bm.cal.GetCurrentActivity(t)
