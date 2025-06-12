@@ -78,8 +78,7 @@ func (p *personaWA2000) Help() string {
 }
 
 func (p *personaWA2000) GetReminderCustomizedStr(t time.Time) (prefix string, suffix string) {
-	return "哼，是時候確認一下自己的:\n",
-		"\n_WA醬 現在在測試中, 現在模擬的日期是 " + t.Format("2006-01-02") + "_\n" // TODO: REMOVE
+	return "哼，是時候確認一下自己的:\n", ""
 }
 
 func (p *personaWA2000) RandomDialog() string {

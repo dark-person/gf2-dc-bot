@@ -12,6 +12,7 @@ func (bm *BotManager) getDailyReminderMsg() string {
 	// Get instance of current time
 	t := time.Now()
 
+	fmt.Println(currentTimeStr(), "Reminder message creating, demo at", t.Format("2006-01-02 15:04:05"), "...")
 	prefix, suffix := bm.persona.GetReminderCustomizedStr(t)
 
 	// Set fixed daily info
