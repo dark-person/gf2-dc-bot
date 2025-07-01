@@ -13,7 +13,7 @@ import (
 
 const initDefenseVal = 2
 
-const BOT_NAME = "wa2000"
+const botName = "wa2000"
 
 // Persona for WA2000 character.
 type personaWA2000 struct {
@@ -98,7 +98,7 @@ func (p *personaWA2000) ReplyIfMentionBot(s *discordgo.Session, channelID string
 func (p *personaWA2000) ReplyIfMentionBotName(s *discordgo.Session, channelID string, incoming string) (isSent bool, err error) {
 	lower := strings.ToLower(incoming)
 
-	if strings.Contains(lower, BOT_NAME) {
+	if strings.Contains(lower, botName) {
 		err = discordutils.SendMsgToChannel(s, channelID, "哼")
 		return err != nil, err
 	}
@@ -107,7 +107,7 @@ func (p *personaWA2000) ReplyIfMentionBotName(s *discordgo.Session, channelID st
 }
 
 func onSpecialMention() string {
-	r := rand.IntN(1)
+	r := rand.IntN(2)
 	switch r {
 	case 0:
 		return "(臉紅"
