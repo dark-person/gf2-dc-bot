@@ -1,5 +1,24 @@
 package calendar
 
+import "time"
+
+// Core function to check if given time is within range of gun-smoke frontline.
+func (c *Calendar) IsGunSmokeFrontline(t time.Time) (bool, error) {
+	row, err := c.db.QueryRow("SELECT COUNT(*) FROM `calendar_ranged` WHERE start_at <= ? AND end_at >= ? AND schedule_name=? ORDER BY start_at", ConvertTimeToInt(t), ConvertTimeToInt(t), "塵煙")
+
+	if err != nil {
+		return false, err
+	}
+
+	var count int
+	err = row.Scan(&count)
+	if err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
 // Core function to get calendar items from database.
 // This function assume all argument passed to this function is valid, no checking will be performed.
 func (c *Calendar) getCalendarItems(query string, intTime ...any) ([]CalendarItem, error) {

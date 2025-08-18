@@ -125,3 +125,20 @@ func (bm *BotManager) SendReminder() error {
 	}
 	return nil
 }
+
+// Send message to discord channel, to notify specific role to remember gun-smoke frontline event.
+// Please note that discord token must be set before call this function.
+func (bm *BotManager) SendGunSmokeReminder() error {
+	if !bm.initialized {
+		return fmt.Errorf("bot manager not initialized")
+	}
+
+	// Prepare message
+	message := fmt.Sprintf("<@&%s> 各位記得打塵煙!!!", bm.cfg.GunSmokeRemindRole)
+
+	_, err := bm.session.ChannelMessageSend(bm.ReminderChannel, message)
+	if err != nil {
+		return fmt.Errorf("failed to send message to discord: %v", err)
+	}
+	return nil
+}

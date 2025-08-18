@@ -9,7 +9,12 @@ import (
 
 // Interface for discord bot behavior.
 type DiscordBot interface {
+	// Send message to discord channel. Please note that discord token must be set before call this function.
 	SendReminder() error
+
+	// Send message to discord channel, to notify specific role to remember gun-smoke frontline event.
+	// Please note that discord token must be set before call this function.
+	SendGunSmokeReminder() error
 }
 
 // Persona interface for discord bots.

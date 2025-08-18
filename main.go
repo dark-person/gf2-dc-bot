@@ -32,7 +32,7 @@ func main() {
 	}
 
 	fmt.Println(currentTimeStr(),
-		"Config loaded. Token: ", cfg.Token, "Channels: ", cfg.ReminderChannel)
+		"Config loaded. Token: ", cfg.Token, "Channels: ", cfg.ReminderChannel, "Role: ", cfg.GunSmokeRemindRole)
 
 	// Init discord
 	bot := dcbot.NewManager(wa2000.New())

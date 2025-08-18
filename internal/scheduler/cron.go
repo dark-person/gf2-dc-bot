@@ -2,6 +2,7 @@ package scheduler
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/dark-person/gf2-dc-bot/pkg/api"
 )
@@ -54,5 +55,26 @@ func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
 			return
 		}
 		fmt.Println(currentTimeStr(), "[Daily] Message sent.")
+	})
+
+	// Send message at 23:30 of computer
+	s.c.AddFunc("0 23 * * *", func() {
+		flag, err := s.cal.IsGunSmokeFrontline(time.Now())
+		if err != nil {
+			fmt.Println(currentTimeStr(), "Error when get database value:", err)
+			return
+		}
+
+		fmt.Println(currentTimeStr(), "[Daily] Check if gun-smoke frontline needed: ", flag)
+		if !flag {
+			return
+		}
+
+		err = bot.SendGunSmokeReminder()
+		if err != nil {
+			fmt.Println(currentTimeStr(), "Error sending discord message:", err)
+			return
+		}
+		fmt.Println(currentTimeStr(), "[Daily] Gun smoke reminder sent.")
 	})
 }

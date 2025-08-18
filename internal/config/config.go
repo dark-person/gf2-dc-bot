@@ -16,6 +16,9 @@ type DiscordConfig struct {
 
 	// Channel ID for daily reminder notification
 	ReminderChannel string `koanf:"reminder.channel-id"`
+
+	// Role ID for gun-smoke frontline notification
+	GunSmokeRemindRole string `koanf:"gun-smoke-reminder.role-id"`
 }
 
 // Load yaml config from given path,

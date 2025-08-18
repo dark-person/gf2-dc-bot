@@ -3,3 +3,6 @@ discord:
 
 reminder:
   channel-id:
+
+gun-smoke-reminder:
+  role-id:
