@@ -38,4 +38,7 @@ type BotPersona interface {
 
 	// Send message if message contains keyword to trigger special reaction.
 	ReplyIfHasKeyword(s *discordgo.Session, channelID string, incoming string) (isSent bool, err error)
+
+	// Return message for gun-smoke frontline dialog. The custom string MUST include "<@&%s>" for mention.
+	GunSmokeRemindDialog(roleID string) string
 }

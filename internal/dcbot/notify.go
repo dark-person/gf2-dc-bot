@@ -134,7 +134,7 @@ func (bm *BotManager) SendGunSmokeReminder() error {
 	}
 
 	// Prepare message
-	message := fmt.Sprintf("<@&%s> 各位記得打塵煙!!!", bm.cfg.GunSmokeRemindRole)
+	message := bm.persona.GunSmokeRemindDialog(bm.cfg.GunSmokeRemindRole)
 
 	_, err := bm.session.ChannelMessageSend(bm.ReminderChannel, message)
 	if err != nil {

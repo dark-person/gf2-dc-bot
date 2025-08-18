@@ -2,6 +2,7 @@
 package wa2000
 
 import (
+	"fmt"
 	"math/rand/v2"
 	"strings"
 	"time"
@@ -134,4 +135,8 @@ func (p *personaWA2000) ReplyIfHasKeyword(s *discordgo.Session, channelID string
 	}
 
 	return false, nil
+}
+
+func (p *personaWA2000) GunSmokeRemindDialog(roleID string) string {
+	return fmt.Sprintf("<@&%s> 哼, 今天塵煙要出兩刀, 記得感謝我哦。", roleID)
 }
