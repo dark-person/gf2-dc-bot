@@ -13,7 +13,7 @@ func currentTimeStr() string {
 // Calculate the next ranged date by non-predicted data in database.
 func (c *Calendar) CalcNextRangedDate() error {
 	// Get Latest schedule item that is not predicted
-	raw, err := c.GetLatestConfirmedRangedActivity()
+	raw, err := c.getLatestRangedActivity()
 	if err != nil {
 		return fmt.Errorf("error when get confirmed ranged activity: %v", err)
 	}
@@ -21,13 +21,19 @@ func (c *Calendar) CalcNextRangedDate() error {
 	// Convert raw data to map for easier manipulation and comparison
 	m := LatestScheduleMap(raw)
 
-	// Gun-smoke frontline calculation (Add three weeks)
+	// ---- Gun-smoke frontline calculation (Add three weeks)----
 	item := m["塵煙"]
-	next := item.Copy()
 
+	// Skip calculation if it is not expired
+	endAt := ConvertIntToTime(item.EndAt)
+	if !endAt.Before(time.Now()) {
+		return nil
+	}
+
+	next := item.Copy()
 	next.StartAt = ConvertTimeToInt(ConvertIntToTime(next.StartAt).AddDate(0, 0, 21))
 	next.EndAt = ConvertTimeToInt(ConvertIntToTime(next.StartAt).AddDate(0, 0, 6))
-	next.IsPredicted = true
+	next.IsPredicted = false
 
 	// Insert latest record to database
 	err = c.addCalendarItems(next)

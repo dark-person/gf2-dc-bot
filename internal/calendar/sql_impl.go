@@ -2,11 +2,11 @@ package calendar
 
 import "time"
 
-// Get latest confirmed (i.e. not predicted) activity from database.
-func (c *Calendar) GetLatestConfirmedRangedActivity() ([]CalendarItem, error) {
+// Get latest activity from database.
+func (c *Calendar) getLatestRangedActivity() ([]CalendarItem, error) {
 	return c.getCalendarItems(
 		`SELECT schedule_name, start_at, end_at, is_predicted FROM (
-			SELECT schedule_name, start_at, end_at, is_predicted FROM calendar_ranged WHERE is_predicted = 0 ORDER BY start_at DESC
+			SELECT schedule_name, start_at, end_at, is_predicted FROM calendar_ranged ORDER BY start_at DESC
 		) GROUP BY schedule_name`,
 	)
 }
