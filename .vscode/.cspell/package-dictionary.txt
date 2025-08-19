@@ -8,3 +8,4 @@ knadh
 koanf
 lazydb
 robfig
+zerolog
