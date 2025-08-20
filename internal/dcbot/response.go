@@ -1,10 +1,8 @@
 package dcbot
 
 import (
-	"fmt"
-	"time"
-
 	"github.com/bwmarrin/discordgo"
+	"github.com/rs/zerolog/log"
 
 	"github.com/dark-person/gf2-dc-bot/pkg/discordutils"
 )
@@ -18,9 +16,12 @@ func (bm *BotManager) messageCreate(s *discordgo.Session, m *discordgo.MessageCr
 		return
 	}
 
-	fmt.Printf("%s [%s] %s: %s\n",
-		time.Now().Format("2006-01-02 15:04:05"),
-		m.ChannelID, m.Author.Username, m.Content)
+	log.Trace().
+		Timestamp().
+		Str("Channel", m.ChannelID).
+		Str("Author", m.Author.Username).
+		Str("Msg", m.Content).
+		Send()
 
 	var isSent bool
 	var err error
@@ -29,7 +30,7 @@ func (bm *BotManager) messageCreate(s *discordgo.Session, m *discordgo.MessageCr
 	if m.Content == "?help" {
 		err := discordutils.SendMsgToChannel(s, m.ChannelID, bm.persona.Help())
 		if err != nil {
-			fmt.Println(err)
+			log.Error().Err(err).Send()
 			return
 		}
 
@@ -42,7 +43,7 @@ func (bm *BotManager) messageCreate(s *discordgo.Session, m *discordgo.MessageCr
 	if m.Content == "!remind" {
 		err := discordutils.SendMsgToChannel(s, m.ChannelID, bm.getDailyReminderMsg())
 		if err != nil {
-			fmt.Println(err)
+			log.Error().Err(err).Send()
 			return
 		}
 
@@ -58,7 +59,7 @@ func (bm *BotManager) messageCreate(s *discordgo.Session, m *discordgo.MessageCr
 	}
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error().Err(err).Send()
 		return
 	}
 
@@ -71,7 +72,7 @@ func (bm *BotManager) messageCreate(s *discordgo.Session, m *discordgo.MessageCr
 	}
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error().Err(err).Send()
 		return
 	}
 
@@ -84,7 +85,7 @@ func (bm *BotManager) messageCreate(s *discordgo.Session, m *discordgo.MessageCr
 	}
 
 	if err != nil {
-		fmt.Println(err)
+		log.Error().Err(err).Send()
 		return
 	}
 }

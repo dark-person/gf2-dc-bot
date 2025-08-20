@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/dark-person/gf2-dc-bot/pkg/api"
+	"github.com/rs/zerolog/log"
 )
 
 // Calculate next date, include ranged date & cycled event.
@@ -29,52 +30,65 @@ func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
 	// Recalculate dates when startup
 	err := s.calcNext()
 	if err != nil {
-		fmt.Println(currentTimeStr(), "Error calculating next date in startup: ", err)
+		log.Error().Err(err).Msg("Error calculating next date in startup.")
 		return
 	}
-	fmt.Println(currentTimeStr(), "[Startup] Next date updated.")
+	log.Debug().
+		Str("Phase", "Startup").
+		Msg("Next date updated.")
 
 	// Recalculate ranged schedule date when every day start
 	s.c.AddFunc("0 0 * * *", func() {
 		err := s.calcNext()
 		if err != nil {
-			fmt.Println(currentTimeStr(), "Error calculating next ranged date:", err)
+			log.Error().Err(err).Msg("Error calculating next ranged date.")
 			return
 		}
-		fmt.Println(currentTimeStr(), "[Daily] Next date updated.")
+		log.Debug().
+			Str("Phase", "Daily").
+			Msg("Next date updated.")
 	})
 
 	// Send message at 22:00 of computer
 	s.c.AddFunc("0 22 * * *", func() {
-		fmt.Println(currentTimeStr(), "[Daily] Start send daily reminder message.")
+		log.Debug().
+			Str("Phase", "Daily").
+			Msg("Start send daily reminder message.")
 
 		// Send discord message by combined all
 		err := bot.SendReminder()
 		if err != nil {
-			fmt.Println(currentTimeStr(), "Error sending discord message:", err)
+			log.Error().Err(err).Msg("Error sending discord message:")
 			return
 		}
-		fmt.Println(currentTimeStr(), "[Daily] Message sent.")
+		log.Debug().
+			Str("Phase", "Daily").
+			Msg("Message sent.")
 	})
 
 	// Send message at 23:30 of computer
 	s.c.AddFunc("0 23 * * *", func() {
 		flag, err := s.cal.IsGunSmokeFrontline(time.Now())
 		if err != nil {
-			fmt.Println(currentTimeStr(), "Error when get database value:", err)
+			log.Error().Err(err).Msg("Error when get database value.")
 			return
 		}
 
-		fmt.Println(currentTimeStr(), "[Daily] Check if gun-smoke frontline needed: ", flag)
+		log.Debug().
+			Str("Phase", "Daily").
+			Bool("flag", flag).
+			Msg("Check if gun-smoke frontline needed.")
 		if !flag {
 			return
 		}
 
 		err = bot.SendGunSmokeReminder()
 		if err != nil {
-			fmt.Println(currentTimeStr(), "Error sending discord message:", err)
+			log.Error().Err(err).Msg("Error sending discord message:")
 			return
 		}
-		fmt.Println(currentTimeStr(), "[Daily] Gun smoke reminder sent.")
+		log.Debug().
+			Str("Phase", "Daily").
+			Msg("[Daily] Gun smoke reminder sent.")
 	})
 }
