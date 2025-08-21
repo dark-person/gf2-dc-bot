@@ -2,10 +2,10 @@
 package calendar
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/dark-person/lazydb"
+	"github.com/rs/zerolog/log"
 )
 
 // Calendar struct for manage all scheduled events.
@@ -90,7 +90,9 @@ func (c *CycledEventItem) RemainDays(t time.Time) int {
 	days := c.Deadline - temp
 
 	if days < 0 {
-		fmt.Println("[WARN] cycled event expired: ", c)
+		log.Warn().
+			Interface("Event", c).
+			Msg(" cycled event expired")
 	}
 
 	return days

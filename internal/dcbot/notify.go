@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/dark-person/gf2-dc-bot/internal/calendar"
+	"github.com/rs/zerolog/log"
 )
 
 // Get daily notification as string. This function is public method due to more flexibility.
@@ -12,7 +13,9 @@ func (bm *BotManager) getDailyReminderMsg() string {
 	// Get instance of current time
 	t := time.Now()
 
-	fmt.Println(currentTimeStr(), "Reminder message creating, demo at", t.Format("2006-01-02 15:04:05"), "...")
+	log.Debug().
+		Time("demoAt", t).
+		Msg("Reminder message creating.")
 	prefix, suffix := bm.persona.GetReminderCustomizedStr(t)
 
 	// Set fixed daily info
@@ -25,13 +28,13 @@ func (bm *BotManager) getDailyReminderMsg() string {
 	// Get info details
 	calItems, err := bm.cal.GetCurrentActivity(t)
 	if err != nil {
-		fmt.Println(currentTimeStr(), "Error getting reminder details:", err)
+		log.Error().Err(err).Msg("Error getting reminder details.")
 		return ""
 	}
 
 	// Check if activity is going on
 	if calendar.HasScheduleName(calItems, "活動物資") {
-		fmt.Println(currentTimeStr(), "Activity Battle Detected.")
+		log.Debug().Msg("Activity Battle Detected.")
 		item := calendar.GetFirstByScheduleName(calItems, "活動物資")
 
 		start := calendar.ConvertIntToTime(item.StartAt)
@@ -42,7 +45,7 @@ func (bm *BotManager) getDailyReminderMsg() string {
 
 	// Check if weekday is sunday
 	if t.Weekday() == time.Sunday || t.Weekday() == time.Saturday {
-		fmt.Println(currentTimeStr(), "Saturday/Sunday detected.")
+		log.Debug().Msg("Saturday/Sunday detected.")
 		msg += "\n### 每周特別提醒:\n"
 		msg += "- 首領挑戰自律 3 場\n"
 		msg += "- 公會商店兌換 **鍋鍋沙**\n"
@@ -53,7 +56,7 @@ func (bm *BotManager) getDailyReminderMsg() string {
 	// Cycle Event reminder
 	cycled, err := bm.cal.GetUpcomingDeadline(t)
 	if err != nil {
-		fmt.Println(currentTimeStr(), "Error getting upcoming deadline:", err)
+		log.Error().Err(err).Msg("Error getting upcoming deadline.")
 		return ""
 	}
 
@@ -61,7 +64,7 @@ func (bm *BotManager) getDailyReminderMsg() string {
 	cycled = calendar.FilterNoRemindCycledEvents(cycled, t)
 
 	if len(cycled) > 0 {
-		fmt.Println(currentTimeStr(), "Cycle event detected.")
+		log.Debug().Msg("Cycle event detected.")
 		msg += "\n### 循環活動提醒:\n"
 		for _, evt := range cycled {
 			msg += fmt.Sprintf("- %s (剩餘 %d 天)\n", evt.Name, evt.RemainDays(t))
@@ -78,9 +81,9 @@ func (bm *BotManager) getDailyReminderMsg() string {
 	last6DayOfMonth := firstOfMonth.AddDate(0, 1, -6).Day()
 
 	if currentDay >= last6DayOfMonth {
-		fmt.Println(currentTimeStr(), "Monthly reminder is needed.")
+		log.Debug().Msg("Monthly reminder is needed.")
 
-		fmt.Println(currentTimeStr(), "Last two day of month detected.")
+		log.Debug().Msg("Last two day of month detected.")
 		msg += "\n### 月底特別提醒:\n"
 		msg += fmt.Sprintf("- 兵棋推演自殺 20 場 (剩餘 %d 天)\n", (lastOfCurrentMonth - currentDay))
 
@@ -92,7 +95,7 @@ func (bm *BotManager) getDailyReminderMsg() string {
 
 	// Check if gun smoke frontline is running
 	if calendar.HasScheduleName(calItems, "塵煙") {
-		fmt.Println(currentTimeStr(), "GunSmoke Frontline Detected.")
+		log.Debug().Msg("GunSmoke Frontline Detected.")
 
 		item := calendar.GetFirstByScheduleName(calItems, "塵煙")
 
