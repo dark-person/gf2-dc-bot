@@ -28,3 +28,7 @@ config*.yaml
 
 # Database
 data*.db
+
+# TODO
+TODO
+TODO.*
