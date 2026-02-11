@@ -21,9 +21,10 @@ func (bm *BotManager) getDailyReminderMsg() string {
 	// Set fixed daily info
 	msg := prefix
 	msg += "### 每日\n"
+	msg += "- 活動層"
 	msg += "- 品質甄選 > 常駐商店 > 每日禮包\n"
-	msg += "- 實兵演習 3 場\n"
-	msg += "- 檢查 邊界推進\n"
+	msg += "- 實兵演習 >=1 場\n"
+	msg += "- 檢查 限時開啟 -> 邊界推進 -> 晶源採集\n"
 
 	// Get info details
 	calItems, err := bm.cal.GetCurrentActivity(t)
@@ -46,11 +47,21 @@ func (bm *BotManager) getDailyReminderMsg() string {
 		msg += "- 活動自律 3 場 (? ~ ?)\n"
 	}
 
+	// Check if weekday is saturday for drinks ticket
+	if t.Weekday() == time.Saturday {
+		log.Debug().Msg("Saturday detected.")
+
+		msg += "\n### 周六特別提醒:\n"
+		msg += "- 限時開啟 -> 邊界推進 -> 異位衝突 3800分 領飲品兌換卷\n"
+	}
+
 	// Check if weekday is sunday
 	if t.Weekday() == time.Sunday || t.Weekday() == time.Saturday {
 		log.Debug().Msg("Saturday/Sunday detected.")
 		msg += "\n### 每周特別提醒:\n"
 		msg += "- 首領挑戰自律 3 場\n"
+		msg += "- 限時開啟 -> 邊界推進 -> 限區懸賞\n"
+		msg += "- 限時開啟 -> 邊界推進 -> 異位衝突\n"
 		msg += "- 公會商店兌換 **鍋鍋沙**\n"
 		msg += "- 首領商店兌換 **紫核、好感度道具**\n"
 		msg += "- 調度商店兌換 **抽抽、好感度道具，能全掃就掃**\n"
