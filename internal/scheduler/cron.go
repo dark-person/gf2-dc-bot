@@ -66,7 +66,7 @@ func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
 			Msg("Message sent.")
 	})
 
-	// Send message at 23:30 of computer
+	// Send message at 23:00 of computer
 	s.c.AddFunc("0 23 * * *", func() {
 		flag, err := s.cal.IsGunSmokeFrontline(time.Now())
 		if err != nil {
