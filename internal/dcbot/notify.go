@@ -21,7 +21,7 @@ func (bm *BotManager) getDailyReminderMsg() string {
 	// Set fixed daily info
 	msg := prefix
 	msg += "### 每日\n"
-	msg += "- 活動層"
+	msg += "- 活動層\n"
 	msg += "- 品質甄選 > 常駐商店 > 每日禮包\n"
 	msg += "- 實兵演習 >=1 場\n"
 	msg += "- 檢查 限時開啟 -> 邊界推進 -> 晶源採集\n"
