@@ -32,7 +32,8 @@ func (bm *BotManager) getDailyReminderMsg() string {
 		return ""
 	}
 
-	// Check if activity is going on
+	// Activity should be having on most day, so reminder is always show
+	// Calendar check is to show actual day.
 	if calendar.HasScheduleName(calItems, "活動物資") {
 		log.Debug().Msg("Activity Battle Detected.")
 		item := calendar.GetFirstByScheduleName(calItems, "活動物資")
@@ -41,6 +42,8 @@ func (bm *BotManager) getDailyReminderMsg() string {
 		end := calendar.ConvertIntToTime(item.EndAt)
 
 		msg += "- 活動自律 3 場 (" + start.Format("2006-01-02") + " ~ " + end.Format("2006-01-02") + ")\n"
+	} else {
+		msg += "- 活動自律 3 場 (? ~ ?)\n"
 	}
 
 	// Check if weekday is sunday
