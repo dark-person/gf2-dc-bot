@@ -105,6 +105,11 @@ func (bm *BotManager) getDailyReminderMsg() string {
 		}
 	}
 
+	// Check if Intelligence Supplies active
+	if calendar.HasScheduleName(calItems, "情報補給") {
+		msg += "\n### 情報補給!\n**情報補給活動開放中, 記得領**\n"
+	}
+
 	// Check if gun smoke frontline is running
 	if calendar.HasScheduleName(calItems, "塵煙") {
 		log.Debug().Msg("GunSmoke Frontline Detected.")
