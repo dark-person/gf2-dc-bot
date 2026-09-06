@@ -33,7 +33,7 @@ func main() {
 		Msg("Config loaded.")
 
 	// Init discord
-	bot := dcbot.NewManager(wa2000.New())
+	bot := dcbot.NewManager(wa2000.New(cfg.GunSmokeRemindRole))
 
 	// Setup database
 	err = setup()

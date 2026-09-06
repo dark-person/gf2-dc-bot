@@ -20,13 +20,15 @@ const botName = "wa2000"
 type personaWA2000 struct {
 	dialogList []string
 	defense    int
+
+	MentionGroup string
 }
 
 // Interface check.
 var _ api.BotPersona = (*personaWA2000)(nil)
 
 // Create a new Persona as WA2000 character.
-func New() *personaWA2000 {
+func New(roleID string) *personaWA2000 {
 	l := make([]string, 0)
 	l = append(l,
 		// Girl Frontline 2 Exile
@@ -67,7 +69,7 @@ func New() *personaWA2000 {
 		"湊巧多出來的巧克力啦！要是你敢說不要可不會饒了你的！",
 	)
 
-	return &personaWA2000{dialogList: l, defense: initDefenseVal}
+	return &personaWA2000{dialogList: l, defense: initDefenseVal, MentionGroup: roleID}
 }
 
 func (p *personaWA2000) Help() string {
@@ -131,6 +133,12 @@ func (p *personaWA2000) ReplyIfHasKeyword(s *discordgo.Session, channelID string
 	// Burn someone
 	if strings.Contains(incoming, "歐洲人都該燒") {
 		err = discordutils.SendMsgToChannel(s, channelID, "(舉槍瞄準歐洲人")
+		return err != nil, err
+	}
+
+	// Frontier Conquest
+	if strings.Contains(incoming, "提醒大家有拓界") && p.MentionGroup != "" {
+		err = discordutils.SendMsgToChannel(s, channelID, p.FrontierConquestRemindDialog(p.MentionGroup))
 		return err != nil, err
 	}
 
