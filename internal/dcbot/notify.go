@@ -156,3 +156,20 @@ func (bm *BotManager) SendGunSmokeReminder() error {
 	}
 	return nil
 }
+
+// Send message to discord channel, to notify specific role to remember Frontier Conquest event.
+// Please note that discord token must be set before call this function.
+func (bm *BotManager) SendFrontierConquestReminder() error {
+	if !bm.initialized {
+		return fmt.Errorf("bot manager not initialized")
+	}
+
+	// Prepare message
+	message := bm.persona.FrontierConquestRemindDialog(bm.cfg.GunSmokeRemindRole)
+
+	_, err := bm.session.ChannelMessageSend(bm.ReminderChannel, message)
+	if err != nil {
+		return fmt.Errorf("failed to send message to discord: %v", err)
+	}
+	return nil
+}

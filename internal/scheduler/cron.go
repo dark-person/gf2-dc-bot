@@ -68,7 +68,7 @@ func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
 
 	// Send message at 23:00 of computer
 	s.c.AddFunc("0 23 * * *", func() {
-		flag, err := s.cal.IsGunSmokeFrontline(time.Now())
+		isGunSmoke, err := s.cal.IsGunSmokeFrontline(time.Now())
 		if err != nil {
 			log.Error().Err(err).Msg("Error when get database value.")
 			return
@@ -76,9 +76,10 @@ func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
 
 		log.Debug().
 			Str("Phase", "Daily").
-			Bool("flag", flag).
-			Msg("Check if gun-smoke frontline needed.")
-		if !flag {
+			Bool("isGunSmoke", isGunSmoke).
+			Msg("Check if event message needed.")
+
+		if !isGunSmoke {
 			return
 		}
 
@@ -87,8 +88,37 @@ func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
 			log.Error().Err(err).Msg("Error sending discord message:")
 			return
 		}
+
 		log.Debug().
 			Str("Phase", "Daily").
 			Msg("[Daily] Gun smoke reminder sent.")
+	})
+
+	// Send message at 23:01 of computer
+	s.c.AddFunc("1 23 * * *", func() {
+		isFrontierConquest, err := s.cal.IsFrontierConquest(time.Now())
+		if err != nil {
+			log.Error().Err(err).Msg("Error when get database value.")
+			return
+		}
+
+		log.Debug().
+			Str("Phase", "Daily").
+			Bool("isFrontierConquest", isFrontierConquest).
+			Msg("Check if event message needed.")
+
+		if !isFrontierConquest {
+			return
+		}
+
+		err = bot.SendFrontierConquestReminder()
+		if err != nil {
+			log.Error().Err(err).Msg("Error sending discord message:")
+			return
+		}
+
+		log.Debug().
+			Str("Phase", "Daily").
+			Msg("[Daily] Frontier Conquest reminder sent.")
 	})
 }

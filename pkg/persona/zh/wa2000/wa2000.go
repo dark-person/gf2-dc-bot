@@ -140,3 +140,7 @@ func (p *personaWA2000) ReplyIfHasKeyword(s *discordgo.Session, channelID string
 func (p *personaWA2000) GunSmokeRemindDialog(roleID string) string {
 	return fmt.Sprintf("<@&%s> 哼, 今天塵煙要出兩刀, 記得感謝我哦。", roleID)
 }
+
+func (p *personaWA2000) FrontierConquestRemindDialog(roleID string) string {
+	return fmt.Sprintf("<@&%s> 聽好了！記得要打拓界, 還不快過來！", roleID)
+}

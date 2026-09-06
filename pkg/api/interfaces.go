@@ -15,6 +15,10 @@ type DiscordBot interface {
 	// Send message to discord channel, to notify specific role to remember gun-smoke frontline event.
 	// Please note that discord token must be set before call this function.
 	SendGunSmokeReminder() error
+
+	// Send message to discord channel, to notify specific role to remember Frontier Conquest event.
+	// Please note that discord token must be set before call this function.
+	SendFrontierConquestReminder() error
 }
 
 // Persona interface for discord bots.
@@ -41,4 +45,7 @@ type BotPersona interface {
 
 	// Return message for gun-smoke frontline dialog. The custom string MUST include "<@&%s>" for mention.
 	GunSmokeRemindDialog(roleID string) string
+
+	// Return message for Frontier Conquest dialog. The custom string MUST include "<@&%s>" for mention.
+	FrontierConquestRemindDialog(roleID string) string
 }
