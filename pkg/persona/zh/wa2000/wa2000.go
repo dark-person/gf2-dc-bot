@@ -152,3 +152,7 @@ func (p *personaWA2000) GunSmokeRemindDialog(roleID string) string {
 func (p *personaWA2000) FrontierConquestRemindDialog(roleID string) string {
 	return fmt.Sprintf("<@&%s> 聽好了！記得要打拓界, 還不快過來！", roleID)
 }
+
+func (p *personaWA2000) IntelligenceSuppliesRemindDialog(roleID string) string {
+	return fmt.Sprintf("<@&%s> 呆著幹什麼，還不快過來拿情報補給就會過期啦！", roleID)
+}

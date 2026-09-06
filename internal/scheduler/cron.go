@@ -49,6 +49,34 @@ func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
 			Msg("Next date updated.")
 	})
 
+	// Send message at 18:05 of computer
+	s.c.AddFunc("5 18 * * *", func() {
+		isIntelSupply, err := s.cal.IsIntelligenceSupplies(time.Now())
+		if err != nil {
+			log.Error().Err(err).Msg("Error when get database value.")
+			return
+		}
+
+		log.Debug().
+			Str("Phase", "Daily").
+			Bool("isIntelSupply", isIntelSupply).
+			Msg("Check if event message needed.")
+
+		if !isIntelSupply {
+			return
+		}
+
+		err = bot.SendIntelligenceSuppliesReminder()
+		if err != nil {
+			log.Error().Err(err).Msg("Error sending discord message:")
+			return
+		}
+
+		log.Debug().
+			Str("Phase", "Daily").
+			Msg("[Daily] Intel Supply reminder sent.")
+	})
+
 	// Send message at 22:00 of computer
 	s.c.AddFunc("0 22 * * *", func() {
 		log.Debug().
