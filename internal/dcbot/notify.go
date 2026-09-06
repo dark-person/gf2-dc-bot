@@ -104,6 +104,11 @@ func (bm *BotManager) getDailyReminderMsg() string {
 		msg += "\n### 情報補給!\n**情報補給活動開放中, 記得領**\n"
 	}
 
+	// Check if Frontier Conquest
+	if calendar.HasScheduleName(calItems, "拓界推進") {
+		msg += "\n### 拓界推進!\n**拓界推進活動開放中, 記得參與**\n"
+	}
+
 	// Check if gun smoke frontline is running
 	if calendar.HasScheduleName(calItems, "塵煙") {
 		log.Debug().Msg("GunSmoke Frontline Detected.")
