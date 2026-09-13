@@ -28,9 +28,8 @@ type personaWA2000 struct {
 var _ api.BotPersona = (*personaWA2000)(nil)
 
 // Create a new Persona as WA2000 character.
-func New(roleID string) *personaWA2000 {
-	l := make([]string, 0)
-	l = append(l,
+func New(roleID string) api.BotPersona {
+	l := []string{
 		// Girl Frontline 2 Exile
 		"哈……哈……總算……找到你了，快讓我上車啦！",
 		"突、突然湊過來幹什麼，快走開啦……",
@@ -67,7 +66,7 @@ func New(roleID string) *personaWA2000 {
 		"吶！反正你現在閒著吧……七夕遊園會可以陪你一起去哦！",
 		"新年還是會好好打招呼的！新、新年快樂！怎麼了有意見嗎！",
 		"湊巧多出來的巧克力啦！要是你敢說不要可不會饒了你的！",
-	)
+	}
 
 	return &personaWA2000{dialogList: l, defense: initDefenseVal, MentionGroup: roleID}
 }
@@ -80,7 +79,7 @@ func (p *personaWA2000) Help() string {
 		"- `@我` : 哼\n"
 }
 
-func (p *personaWA2000) GetReminderCustomizedStr(t time.Time) (prefix string, suffix string) {
+func (p *personaWA2000) GetReminderCustomizedStr(_ time.Time) (prefix string, suffix string) {
 	return "哼，是時候確認一下自己的:\n", ""
 }
 

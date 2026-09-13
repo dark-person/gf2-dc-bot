@@ -5,11 +5,6 @@ import (
 	"time"
 )
 
-// Get current time in opinionated formatted string.
-func currentTimeStr() string {
-	return time.Now().Format("2006-01-02 15:04:05")
-}
-
 // Calculate the next ranged date by non-predicted data in database.
 func (c *Calendar) CalcNextRangedDate() error {
 	// Get Latest schedule item that is not predicted

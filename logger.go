@@ -10,7 +10,11 @@ import (
 // Create a new formatter for colorized console output.
 func ColorFormatter() zerolog.Formatter {
 	return func(i any) string {
-		level := i.(string)
+		level, ok := i.(string)
+		if !ok {
+			return "[UNKNOWN]"
+		}
+
 		switch level {
 		case "trace":
 			return "\x1b[90m[TRACE]\x1b[0m"
@@ -22,6 +26,8 @@ func ColorFormatter() zerolog.Formatter {
 			return "\x1b[33m[WARN ]\x1b[0m"
 		case "error":
 			return "\x1b[31m[ERROR]\x1b[0m"
+		case "panic":
+			return "\x1b[41m[PANIC]\x1b[0m"
 
 		default:
 			return "[" + level + "]"
