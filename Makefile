@@ -1,4 +1,4 @@
-.PHONY: default build test lint help
+.PHONY: default build test help
 
 # Default target to build the project
 default: build
@@ -11,4 +11,4 @@ test:	## Run all tests
 	go test ./... -count=1
 
 build:	## Build the project
-	go build ./...
+	go build -x
