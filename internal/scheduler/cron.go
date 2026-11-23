@@ -96,6 +96,14 @@ func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
 
 	// Send message at 23:00 of computer
 	s.c.AddFunc("0 23 * * *", func() {
+		// Check if frontier conquest exist first
+		// Gun Smoke Frontline will not held at same time with frontier conquest
+		isFrontierConquest, err := s.cal.IsFrontierConquest(time.Now())
+		if err != nil {
+			log.Error().Err(err).Msg("Error when get database value.")
+			return
+		}
+
 		isGunSmoke, err := s.cal.IsGunSmokeFrontline(time.Now())
 		if err != nil {
 			log.Error().Err(err).Msg("Error when get database value.")
@@ -104,49 +112,48 @@ func (s *Scheduler) AddDailyCron(bot api.DiscordBot) {
 
 		log.Debug().
 			Str("Phase", "Daily").
+			Bool("isFrontierConquest", isFrontierConquest).
 			Bool("isGunSmoke", isGunSmoke).
 			Msg("Check if event message needed.")
 
-		if !isGunSmoke {
+		// Early return when no critical event active
+		if !isFrontierConquest && !isGunSmoke {
 			return
 		}
 
-		err = bot.SendGunSmokeReminder()
-		if err != nil {
-			log.Error().Err(err).Msg("Error sending discord message:")
-			return
+		// During this point
+		// Here will have 2 possible event:
+		// 1. Frontier Conquest is active
+		// 2. Gun Smoke Frontier is active
+		//
+		// Given Gun Smoke frontier will never held in same time with Frontier Conquest
+
+		// Show frontier conquest as it has higher priority,
+		// and must to call early to override auto-calculated gun smoke dates
+		if isFrontierConquest {
+			err = bot.SendFrontierConquestReminder()
+			if err != nil {
+				log.Error().Err(err).Msg("Error sending discord message:")
+				return
+			}
+
+			log.Debug().
+				Str("Phase", "Daily").
+				Msg("[Daily] Frontier Conquest reminder sent.")
+
+			return // Prevent message overlap
 		}
 
-		log.Debug().
-			Str("Phase", "Daily").
-			Msg("[Daily] Gun smoke reminder sent.")
-	})
+		if isGunSmoke {
+			err = bot.SendGunSmokeReminder()
+			if err != nil {
+				log.Error().Err(err).Msg("Error sending discord message:")
+				return
+			}
 
-	// Send message at 23:01 of computer
-	s.c.AddFunc("1 23 * * *", func() {
-		isFrontierConquest, err := s.cal.IsFrontierConquest(time.Now())
-		if err != nil {
-			log.Error().Err(err).Msg("Error when get database value.")
-			return
+			log.Debug().
+				Str("Phase", "Daily").
+				Msg("[Daily] Gun smoke reminder sent.")
 		}
-
-		log.Debug().
-			Str("Phase", "Daily").
-			Bool("isFrontierConquest", isFrontierConquest).
-			Msg("Check if event message needed.")
-
-		if !isFrontierConquest {
-			return
-		}
-
-		err = bot.SendFrontierConquestReminder()
-		if err != nil {
-			log.Error().Err(err).Msg("Error sending discord message:")
-			return
-		}
-
-		log.Debug().
-			Str("Phase", "Daily").
-			Msg("[Daily] Frontier Conquest reminder sent.")
 	})
 }
