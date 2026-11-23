@@ -6,3 +6,6 @@ reminder:
 
 gun-smoke-reminder:
   role-id:
+
+admin:
+  channel-id:
