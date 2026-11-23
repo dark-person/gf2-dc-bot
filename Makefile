@@ -20,7 +20,7 @@ exe:		## Create complete build of this project
 	CURRENT_TAG=$$(echo "$${CURRENT_TAG////-}");\
 	if [ ! -z "$${CURRENT_TAG}" ]; then\
 		mv gf2-dc-bot.exe "gf2-dc-bot-$${CURRENT_TAG}.exe";\
-		printf '@echo off\r\nstart "" "gf2-dc-bot-$${CURRENT_TAG}.exe"\r\n' > "start.bat"; \
+		printf '@echo off\r\nstart "" "gf2-dc-bot-%s.exe"\r\n' "$${CURRENT_TAG}" > "start.bat"; \
 		echo "Window EXE Distribution ready at 'gf2-dc-bot-$${CURRENT_TAG}.exe'.";\
 	else\
 		mv gf2-dc-bot.exe "gf2-dc-bot-testing.exe";\
