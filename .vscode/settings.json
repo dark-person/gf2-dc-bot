@@ -9,7 +9,8 @@
         "editor.defaultFormatter": "adpyke.vscode-sql-formatter"
     },
     "[yaml]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "prettier.tabWidth": 2
     },
     "code-runner.clearPreviousOutput": true,
     "code-runner.runInTerminal": true,
